@@ -6,6 +6,19 @@ public class Executor(IExitHandler exitHandler, IPromptRunner promptRunner, ISou
 {
     public void Execute(string[] args)
     {
-        throw new NotImplementedException();
+        if (args.Length > 1)
+        {
+            Console.WriteLine("Usage: cslox [script]");
+            const int InvalidUsageCode = 64;
+            exitHandler.Exit(InvalidUsageCode);
+        }
+        else if (args.Length == 1)
+        {
+            sourceRunner.Run(args[0]);
+        }
+        else
+        {
+            promptRunner.Run();
+        }
     }
 }
