@@ -8,6 +8,7 @@ namespace Unit.Frontend;
 
 public abstract class ExecutorTestFixture : CommonTestBase
 {
+    protected string[] Args { get; set; } = null!;
     protected Mock<IExitHandler> MockExitHandler { get; set; }
     
     protected Mock<IPromptRunner> MockPromptRunner { get; set; }
@@ -19,6 +20,8 @@ public abstract class ExecutorTestFixture : CommonTestBase
     [SetUp]
     public void SetUp()
     {
+        Args = [..CreateMany<string>()];
+        
         MockExitHandler = new Mock<IExitHandler>();
         
         MockPromptRunner = new Mock<IPromptRunner>();
