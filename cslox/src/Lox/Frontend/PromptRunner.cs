@@ -6,6 +6,16 @@ public class PromptRunner(IInput input, ISourceRunner sourceRunner) : IPromptRun
 {
     public void Run()
     {
-        throw new NotImplementedException();
+        for (;;)
+        {
+            Console.Write("> ");
+            var lineRead = input.ReadLine();
+            if (lineRead == null)
+            {
+                break;
+            }
+            
+            sourceRunner.Run(lineRead);
+        }
     }
 }
