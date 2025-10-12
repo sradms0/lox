@@ -4,8 +4,5 @@ namespace Frontend;
 
 public class Input(TextReader texReader) : IInput
 {
-    public string? ReadLine()
-    {
-        throw new NotImplementedException();
-    }
+    public string? ReadLine() => texReader.ReadLine();
 }
