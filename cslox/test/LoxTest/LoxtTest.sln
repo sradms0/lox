@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit", "Unit\Unit.csproj", "{A576247F-1DE5-424F-885E-43755498B874}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration", "Integration\Integration.csproj", "{AB8589E7-5463-4B1F-8888-62025AD9393A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.ExitHandlerExecutable", "Integration.ExitHandlerExecutable\Integration.ExitHandlerExecutable.csproj", "{2F0A4A96-CBFC-4122-B70B-03399A2583CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,5 +24,13 @@ Global
 		{A576247F-1DE5-424F-885E-43755498B874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A576247F-1DE5-424F-885E-43755498B874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A576247F-1DE5-424F-885E-43755498B874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB8589E7-5463-4B1F-8888-62025AD9393A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB8589E7-5463-4B1F-8888-62025AD9393A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB8589E7-5463-4B1F-8888-62025AD9393A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB8589E7-5463-4B1F-8888-62025AD9393A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F0A4A96-CBFC-4122-B70B-03399A2583CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F0A4A96-CBFC-4122-B70B-03399A2583CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F0A4A96-CBFC-4122-B70B-03399A2583CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F0A4A96-CBFC-4122-B70B-03399A2583CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
