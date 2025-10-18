@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces.Frontend", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{38CF7AA1-9CDE-43FB-9A82-66BED2ACFE97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syntax", "Syntax\Syntax.csproj", "{3A6E4152-AF92-4135-9EFB-4D6E74AF65A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +25,9 @@ Global
 		{38CF7AA1-9CDE-43FB-9A82-66BED2ACFE97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38CF7AA1-9CDE-43FB-9A82-66BED2ACFE97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38CF7AA1-9CDE-43FB-9A82-66BED2ACFE97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A6E4152-AF92-4135-9EFB-4D6E74AF65A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A6E4152-AF92-4135-9EFB-4D6E74AF65A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A6E4152-AF92-4135-9EFB-4D6E74AF65A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A6E4152-AF92-4135-9EFB-4D6E74AF65A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
