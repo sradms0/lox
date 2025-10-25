@@ -26,5 +26,8 @@
       <Reference Include="Interfaces.Frontend">
         <HintPath>..\..\..\src\Lox\Interfaces\Interfaces.Frontend\bin\Debug\net9.0\Interfaces.Frontend.dll</HintPath>
       </Reference>
+      <Reference Include="Syntax">
+        <HintPath>..\..\..\src\Lox\Syntax\bin\Debug\net9.0\Syntax.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>
