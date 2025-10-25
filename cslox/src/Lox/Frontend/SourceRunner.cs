@@ -6,6 +6,10 @@ public class SourceRunner(ILexer lexer) : ISourceRunner
 {
     public void Run(string source)
     {
-        throw new NotImplementedException();
+        lexer.Source = source;
+        foreach (var token in lexer.ReadTokens())
+        {
+            Console.WriteLine(token);
+        }
     }
 }
