@@ -10,13 +10,13 @@ public abstract class PromptRunnerTestFixture : CommonTestBase
 {
     protected const string ExpectedPromptOutputString = "> ";
     
-    protected string LineRead { get; set; }
+    protected string LineRead { get; private set; } = null!;
     
-    protected Mock<IInput> MockInput { get; set; }
+    protected Mock<IInput> MockInput { get; private set; } = null!;
     
-    protected Mock<ISourceRunner> MockSourceRunner { get; set; }
+    protected Mock<ISourceRunner> MockSourceRunner { get; private set; } = null!;
     
-    protected PromptRunner PromptRunner { get; set; }
+    protected PromptRunner PromptRunner { get; private set; } = null!;
     
     [SetUp]
     public void SetUp()

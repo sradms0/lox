@@ -9,13 +9,13 @@ namespace Unit.Frontend;
 
 public abstract class SourceRunnerTestFixture : CommonTestBase
 {
-    protected string Source { get; set; }
+    protected string Source { get; private set; } = null!;
     
-    protected List<Token> Tokens { get; set; }
+    protected List<Token> Tokens { get; private set; } = null!;
     
-    protected Mock<ILexer> MockLexer { get; set; }
+    protected Mock<ILexer> MockLexer { get; private set; } = null!;
     
-    protected SourceRunner SourceRunner { get; set; }
+    protected SourceRunner SourceRunner { get; private set; } = null!;
 
     [SetUp]
     public void SetUp()

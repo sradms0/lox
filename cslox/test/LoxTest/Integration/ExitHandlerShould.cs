@@ -26,11 +26,15 @@ public class ExitHandlerShould : CommonTestBase
             RedirectStandardError = true,
             CreateNoWindow = true,
         };
+        
         // Act
         using (var process = Process.Start(processStartInfo))
         {
-            process.WaitForExit();
-            exitCodeResult = process.ExitCode;
+            if (process != null)
+            {
+                process.WaitForExit();
+                exitCodeResult = process.ExitCode;
+            }
         }
         
         // Assert

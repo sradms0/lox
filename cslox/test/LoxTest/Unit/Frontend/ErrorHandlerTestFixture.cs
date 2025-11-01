@@ -8,9 +8,9 @@ public abstract class ErrorHandlerTestFixture : CommonTestBase
 {
     protected int Line { get; set; }
     
-    protected string Message { get; set; }
-    
-    protected ErrorHandler ErrorHandler { get; set; }
+    protected string Message { get; set; } = null!;
+
+    protected ErrorHandler ErrorHandler { get; private set; } = null!;
 
     [SetUp]
     public void SetUp()

@@ -7,9 +7,9 @@ namespace Unit.Frontend;
 
 public abstract class InputTestFixture : CommonTestBase
 {
-    protected Mock<TextReader> MockTextReader { get; set; }
-    
-    protected Input Input { get; set; }
+    protected Mock<TextReader> MockTextReader { get; private set; } = null!;
+
+    protected Input Input { get; private set; } = null!;
     
     [SetUp]
     public void SetUp()

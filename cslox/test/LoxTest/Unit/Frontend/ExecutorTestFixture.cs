@@ -9,13 +9,14 @@ namespace Unit.Frontend;
 public abstract class ExecutorTestFixture : CommonTestBase
 {
     protected string[] Args { get; set; } = null!;
-    protected Mock<IExitHandler> MockExitHandler { get; set; }
     
-    protected Mock<IPromptRunner> MockPromptRunner { get; set; }
+    protected Mock<IExitHandler> MockExitHandler { get; private set; } = null!;
     
-    protected Mock<ISourceRunner> MockSourceRunner { get; set; }
+    protected Mock<IPromptRunner> MockPromptRunner { get; private set; } = null!;
     
-    protected Executor Executor { get; set;}
+    protected Mock<ISourceRunner> MockSourceRunner { get; private set; } = null!;
+    
+    protected Executor Executor { get; private set; } = null!;
 
     [SetUp]
     public void SetUp()
