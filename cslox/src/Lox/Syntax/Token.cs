@@ -2,5 +2,5 @@
 
 public class Token(TokenType type, string lexeme, object literal, int line)
 {
-    public override string ToString() => throw new NotImplementedException();
+    public override string ToString() => $"{type} ${lexeme} {literal}";
 }
