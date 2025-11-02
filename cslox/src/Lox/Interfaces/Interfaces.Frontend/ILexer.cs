@@ -4,7 +4,5 @@ namespace Interfaces.Frontend;
 
 public interface ILexer
 {
-    string Source { set; }
-
-    IEnumerable<Token> ReadTokens();
+    IEnumerable<Token> ReadTokens(string source);
 }

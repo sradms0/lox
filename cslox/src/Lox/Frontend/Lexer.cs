@@ -3,11 +3,9 @@ using Syntax;
 
 namespace Frontend;
 
-public abstract class Lexer : ILexer
+public class Lexer : ILexer
 {
-    public string Source { private get; set; }
-    
-    public IEnumerable<Token> ReadTokens()
+    public IEnumerable<Token> ReadTokens(string source)
     {
         throw new NotImplementedException();
     }

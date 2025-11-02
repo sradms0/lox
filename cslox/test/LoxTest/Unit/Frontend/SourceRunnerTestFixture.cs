@@ -27,7 +27,7 @@ public abstract class SourceRunnerTestFixture : CommonTestBase
         MockLexer = new Mock<ILexer>();
         
         MockLexer
-            .Setup(lexer => lexer.ReadTokens())
+            .Setup(lexer => lexer.ReadTokens(Source))
             .Returns(() => Tokens);
         
         SourceRunner = new SourceRunner(MockLexer.Object);

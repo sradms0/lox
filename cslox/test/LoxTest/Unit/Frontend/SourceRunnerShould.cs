@@ -41,8 +41,7 @@ public class SourceRunnerShould : SourceRunnerTestFixture
         Console.SetOut(Console.Out);
         
         resultingStandardOutput.Should().Be(expectedStandardOutput);
-        MockLexer.VerifySet(lexer => lexer.Source = Source, Times.Once);
-        MockLexer.Verify(lexer => lexer.ReadTokens(),Times.Once);
+        MockLexer.Verify(lexer => lexer.ReadTokens(Source),Times.Once);
         MockLexer.VerifyNoOtherCalls();
     }
 }
