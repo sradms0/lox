@@ -16,7 +16,11 @@ public class Lexer(IErrorHandler errorHandler) : ILexer
         { '-', TokenType.Minus },
         { '+', TokenType.Plus },
         { ';', TokenType.Semicolon },
-        { '*', TokenType.Star }
+        { '*', TokenType.Star },
+        { '!', TokenType.Bang },
+        { '=', TokenType.Equal },
+        { '<', TokenType.Less },
+        { '>', TokenType.Greater },
     };
     
     private string _source = string.Empty;
