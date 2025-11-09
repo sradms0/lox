@@ -12,7 +12,7 @@ public abstract class LexerTestFixture : CommonTestBase
 {
     protected static readonly Token ExpectedEndOfFileToken = new(TokenType.Eof, string.Empty, null!, 1);
     
-    protected static readonly IReadOnlyDictionary<char, TokenType> ExpectedCharacterTokenTypeMappings =
+    protected static readonly IReadOnlyDictionary<char, TokenType> ExpectedSingleCharacterTokenTypeMappings =
         new Dictionary<char, TokenType>
         {
             { '(', TokenType.LeftParen },
@@ -24,10 +24,14 @@ public abstract class LexerTestFixture : CommonTestBase
             { '-', TokenType.Minus },
             { '+', TokenType.Plus },
             { ';', TokenType.Semicolon },
-            { '*', TokenType.Star }
+            { '*', TokenType.Star },
+            { '!', TokenType.Bang },
+            { '=', TokenType.Equal },
+            { '<', TokenType.Less },
+            { '>', TokenType.Greater },
         };
 
-    protected static readonly IList<char> TokenCharacters = ExpectedCharacterTokenTypeMappings.Keys
+    protected static readonly IList<char> TokenCharacters = ExpectedSingleCharacterTokenTypeMappings.Keys
         .Select(tokenCharacter => tokenCharacter).ToList();
     
     protected string Source { get; set; } = null!;
@@ -48,7 +52,7 @@ public abstract class LexerTestFixture : CommonTestBase
     
     protected List<char> CreatePreBuiltTokenTokenSource(bool hasOneInvalidTokenCharacter, bool hasManyValidTokenCharacters, bool hasAllInvalidTokenCharacters)
     {
-        AddCustomization(ExpectedCharacterTokenTypeMappings.Keys);
+        AddCustomization(ExpectedSingleCharacterTokenTypeMappings.Keys);
         var preBuiltSource = CreateMany<char>().ToList();
         var invalidTokenCharacters = Enumerable.Range(0, preBuiltSource.Count)
             .Select(_ => GetRandomNonTokenCharacter()).ToList();
@@ -67,7 +71,7 @@ public abstract class LexerTestFixture : CommonTestBase
     {
         var expectedTokenResult = preBuiltSource.Select(tokenCharacter =>
         {
-            return ExpectedCharacterTokenTypeMappings.TryGetValue(tokenCharacter, out var tokenType)
+            return ExpectedSingleCharacterTokenTypeMappings.TryGetValue(tokenCharacter, out var tokenType)
                 ? new Token(tokenType, tokenCharacter.ToString(), null!, 1)
                 : null;
         }).OfType<Token>();
@@ -79,7 +83,7 @@ public abstract class LexerTestFixture : CommonTestBase
     {
         return preBuiltSource.Count(sourceCharacter =>
         {
-            return !ExpectedCharacterTokenTypeMappings.TryGetValue(sourceCharacter, out _);
+            return !ExpectedSingleCharacterTokenTypeMappings.TryGetValue(sourceCharacter, out _);
         });
     }
     
@@ -140,7 +144,7 @@ public abstract class LexerTestFixture : CommonTestBase
         do
         {
             randomNonTokenCharacter = (char)Random.Shared.Next();
-        } while (ExpectedCharacterTokenTypeMappings.TryGetValue(randomNonTokenCharacter, out _));
+        } while (ExpectedSingleCharacterTokenTypeMappings.TryGetValue(randomNonTokenCharacter, out _));
         
         return randomNonTokenCharacter;
     }

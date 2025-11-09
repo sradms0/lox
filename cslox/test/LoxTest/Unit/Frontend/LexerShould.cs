@@ -62,7 +62,7 @@ public class LexerShould : LexerTestFixture
     {
         // Arrange
         Source = string.Join(string.Empty, TokenCharacters);
-        var expectedResult = CreateExpectedTokenResultFromSource(ExpectedCharacterTokenTypeMappings.Keys);
+        var expectedResult = CreateExpectedTokenResultFromSource(ExpectedSingleCharacterTokenTypeMappings.Keys);
         IEnumerable<Token>? result = null;
 
         // Act (define)
