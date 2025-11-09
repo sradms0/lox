@@ -10,7 +10,7 @@ namespace Unit.Frontend;
 
 public abstract class LexerTestFixture : CommonTestBase
 {
-    private static readonly Token ExpectedEndOfFileToken = new(TokenType.Eof, string.Empty, null!, 1);
+    protected static readonly Token ExpectedEndOfFileToken = new(TokenType.Eof, string.Empty, null!, 1);
     
     protected static readonly IReadOnlyDictionary<char, TokenType> ExpectedCharacterTokenTypeMappings =
         new Dictionary<char, TokenType>

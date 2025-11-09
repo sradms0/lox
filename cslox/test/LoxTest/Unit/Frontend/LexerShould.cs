@@ -101,4 +101,22 @@ public class LexerShould : LexerTestFixture
             Times.Exactly(expectedErrorHandlerErrorCallCount));
         MockErrorHandler.VerifyNoOtherCalls();
     }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ReadTokens_From_Null_Or_Empty_Source(bool isNull)
+    {
+        // Arrange
+        Source = isNull ? null! : string.Empty;
+        IEnumerable<Token> expectedResult = [ExpectedEndOfFileToken];
+        IEnumerable<Token>? result = null;
+
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
 }
