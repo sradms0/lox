@@ -32,7 +32,7 @@ public class Lexer(IErrorHandler errorHandler) : ILexer
     public IEnumerable<Token> ReadTokens(string source)
     {
         ResetMembers();
-        _source = source;
+        _source = source ?? string.Empty;
         
         while (!IsAtEndOfSource())
         {
