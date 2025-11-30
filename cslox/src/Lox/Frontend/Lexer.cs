@@ -5,24 +5,6 @@ namespace Frontend;
 
 public class Lexer(IErrorHandler errorHandler) : ILexer
 {
-    private static readonly Dictionary<char, TokenType> CharacterTokenTypeMappings = new()
-    {
-        { '(', TokenType.LeftParen },
-        { ')', TokenType.RightParen },
-        { '{', TokenType.LeftBrace },
-        { '}', TokenType.RightBrace },
-        { ',', TokenType.Comma },
-        { '.', TokenType.Dot },
-        { '-', TokenType.Minus },
-        { '+', TokenType.Plus },
-        { ';', TokenType.Semicolon },
-        { '*', TokenType.Star },
-        { '!', TokenType.Bang },
-        { '=', TokenType.Equal },
-        { '<', TokenType.Less },
-        { '>', TokenType.Greater },
-    };
-    
     private string _source = string.Empty;
 
     private int _start;
@@ -47,7 +29,7 @@ public class Lexer(IErrorHandler errorHandler) : ILexer
         
         return _tokens;
     }
-
+    
     private void AddToken(TokenType tokenType) => AddToken(tokenType, null!);
 
     private void AddToken(TokenType tokenType, object literal)
@@ -59,17 +41,69 @@ public class Lexer(IErrorHandler errorHandler) : ILexer
     private char AdvanceToNextCharacterInSource() => _source[_current++];
 
     private bool IsAtEndOfSource() => _current == _source.Length;
+
+    private bool MatchAndAdvanceCurrent(char character)
+    {
+        var isMatched = !IsAtEndOfSource() && character == _source[_current];
+        
+        if (isMatched)
+        {
+            _current++;
+        }
+        
+        return isMatched;
+    }
     
     private void ReadToken()
     {
         var currentCharacter = AdvanceToNextCharacterInSource();
-        if (CharacterTokenTypeMappings.TryGetValue(currentCharacter, out var token))
+        switch (currentCharacter)
         {
-            AddToken(token);
-        }
-        else
-        {
-            errorHandler.Error(_line, "Unexpected Character.");
+            case '(':
+                AddToken(TokenType.LeftParen);
+                break;
+            case ')':
+                AddToken(TokenType.RightParen);
+                break;
+            case '{':
+                AddToken(TokenType.LeftBrace);
+                break;
+            case '}':
+                AddToken(TokenType.RightBrace);
+                break;
+            case ',':
+                AddToken(TokenType.Comma);
+                break;
+            case '.':
+                AddToken(TokenType.Dot);
+                break;
+            case '-':
+                AddToken(TokenType.Minus);
+                break;
+            case '+':
+                AddToken(TokenType.Plus);
+                break;
+            case ';':
+                AddToken(TokenType.Semicolon);
+                break;
+            case '*':
+                AddToken(TokenType.Star);
+                break;
+            case '!':
+                AddToken(MatchAndAdvanceCurrent('=') ? TokenType.BangEqual : TokenType.Bang);
+                break;
+            case '=':
+                AddToken(MatchAndAdvanceCurrent('=') ? TokenType.EqualEqual : TokenType.Equal);
+                break;
+            case '<':
+                AddToken(MatchAndAdvanceCurrent('=') ? TokenType.LessEqual : TokenType.Less);
+                break;
+            case '>':
+                AddToken(MatchAndAdvanceCurrent('=') ? TokenType.GreaterEqual : TokenType.Greater);
+                break;
+            default:
+                errorHandler.Error(_line, "Unexpected Character.");
+                break;
         }
     }
 
