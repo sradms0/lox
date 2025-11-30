@@ -146,9 +146,9 @@ public abstract class LexerTestFixture : CommonTestBase
         return shuffledSource.OfType<string>().ToList();
     }
     
-    protected static void AssertTokenEquivalence(IEnumerable<Token> resultingTokens, IEnumerable<Token> expectedTokens)
+    protected static void AssertTokenEquivalence(IEnumerable<Token>? resultingTokens, IEnumerable<Token> expectedTokens)
     {
-        resultingTokens
+        (resultingTokens ?? [])
             .Zip(expectedTokens, (resultingToken, expectedToken) => (resultingToken, expectedToken)).ToList()
             .ForEach(zippedTokens =>
             {
