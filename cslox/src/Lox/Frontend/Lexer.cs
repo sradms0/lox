@@ -101,6 +101,9 @@ public class Lexer(IErrorHandler errorHandler) : ILexer
             case '>':
                 AddToken(MatchAndAdvanceCurrent('=') ? TokenType.GreaterEqual : TokenType.Greater);
                 break;
+            case '/':
+                AddToken(TokenType.Slash);
+                break;
             default:
                 errorHandler.Error(_line, "Unexpected Character.");
                 break;
