@@ -32,7 +32,8 @@ public abstract class LexerTestFixture : CommonTestBase
             { "=", TokenType.Equal },
             { "<", TokenType.Less },
             { ">", TokenType.Greater },
-            { "!", TokenType.Bang }
+            { "!", TokenType.Bang },
+            { "/", TokenType.Slash }
         };
     
     protected static readonly IReadOnlyDictionary<string, TokenType> ExpectedMultiTokenSymbolTypeMappings =
