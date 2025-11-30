@@ -6,7 +6,7 @@ namespace Shared;
 public abstract class CommonTestBase
 {
     private readonly IFixture _fixture = new Fixture();
-    
+
     protected CommonTestBase()
     {
         FluentAssertions.License.Accepted = true;
@@ -20,4 +20,6 @@ public abstract class CommonTestBase
     {
         _fixture.Customizations.Add(new ElementsBuilder<T>(source));
     } 
+    
+    protected void ClearCustomizations() => _fixture.Customizations.Clear();
 }

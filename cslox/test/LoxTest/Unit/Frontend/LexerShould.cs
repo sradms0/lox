@@ -19,12 +19,12 @@ public class LexerShould : LexerTestFixture
         typeof(Lexer).Should().Implement<ILexer>();
     }
     
-    [Test, TestCaseSource(nameof(TokenCharacters))]
-    public void ReadTokens_From_One_Valid_Token_Source(char tokenCharacter)
+    [Test, TestCaseSource(nameof(SingleTokenSymbols))]
+    public void ReadTokens_From_One_Valid_Single_Token_Symbol_Source(string singleTokenSymbol)
     {
         // Arrange
-        Source = tokenCharacter.ToString();
-        var expectedResult = CreateExpectedTokenResultFromSource([tokenCharacter]);
+        Source = singleTokenSymbol;
+        var expectedResult = CreateExpectedSingleTokenResultFromSource([singleTokenSymbol]);
         IEnumerable<Token>? result = null;
         
         // Act (define)
@@ -36,16 +36,110 @@ public class LexerShould : LexerTestFixture
         MockErrorHandler.VerifyNoOtherCalls();
     }
 
+    [Test, TestCaseSource(nameof(MultiTokenSymbols))]
+    public void ReadTokens_From_One_Valid_Multi_Token_Symbol_Source(string multiTokenSymbol)
+    {
+        // Arrange
+        Source = multiTokenSymbol;
+        var expectedResult = CreateExpectedMultiTokenResultFromSource([multiTokenSymbol]);
+        IEnumerable<Token>? result = null;
+
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+    
     [Test, Combinatorial]
-    public void ReadTokens_From_Many_Valid_Token_Character_Source
+    public void ReadTokens_From_Many_Valid_Single_Token_Symbol_Source
     (
-        [ValueSource(nameof(TokenCharacters))] char tokenCharacter1,
-        [ValueSource(nameof(TokenCharacters))] char tokenCharacter2
+        [ValueSource(nameof(SingleTokenSymbolsCombinationTestCaseSource))] StringPair singleTokenSymbolPair
     )
     {
         // Arrange
-        Source = $"{tokenCharacter1}{tokenCharacter2}";
-        var expectedResult = CreateExpectedTokenResultFromSource([tokenCharacter1, tokenCharacter2]);
+        var singleTokenSymbol1 = singleTokenSymbolPair.First;
+        var singleTokenSymbol2 = singleTokenSymbolPair.Second;
+        Source = $"{singleTokenSymbol1}{singleTokenSymbol2}";
+        var expectedResult = CreateExpectedSingleTokenResultFromSource([singleTokenSymbol1, singleTokenSymbol2]);
+        IEnumerable<Token>? result = null;
+        
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+        
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+    
+    [Test, Combinatorial]
+    public void ReadTokens_From_Many_Valid_Multi_Token_Symbol_Source
+    (
+        [ValueSource(nameof(MultiTokenSymbols))] string multiTokenSymbol1,
+        [ValueSource(nameof(MultiTokenSymbols))] string multiTokenSymbol2
+    )
+    {
+        // Arrange
+        Source = $"{multiTokenSymbol1}{multiTokenSymbol2}";
+        var expectedResult = CreateExpectedMultiTokenResultFromSource([multiTokenSymbol1, multiTokenSymbol2]);
+        IEnumerable<Token>? result = null;
+        
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+        
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+    
+    [Test]
+    public void ReadTokens_From_All_Valid_Single_Token_Symbol_Source()
+    {
+        // Arrange
+        Source = string.Join(string.Empty, SingleTokenSymbols);
+        var expectedResult = CreateExpectedSingleTokenResultFromSource(ExpectedSingleTokenSymbolTypeMappings.Keys);
+        IEnumerable<Token>? result = null;
+
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+    
+    [Test]
+    public void ReadTokens_From_All_Valid_Multi_Token_Symbol_Source()
+    {
+        // Arrange
+        Source = string.Join(string.Empty, MultiTokenSymbols);
+        var expectedResult = CreateExpectedTokenResultFromSource(MultiTokenSymbols);
+        IEnumerable<Token>? result = null;
+
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+
+    [Test, Combinatorial]
+    public void ReadTokens_From_Many_Single_And_Multi_Token_Symbol_Source
+    (
+        [ValueSource(nameof(SingleTokenSymbols))] string singleTokenSymbol1,
+        [ValueSource(nameof(MultiTokenSymbols))] string multiTokenSymbol2
+    )
+    {
+        // Arrange
+        Source = $"{singleTokenSymbol1}{multiTokenSymbol2}";
+        var expectedResult = CreateExpectedTokenResultFromSource([singleTokenSymbol1, multiTokenSymbol2]);
         IEnumerable<Token>? result = null;
         
         // Act (define)
@@ -58,11 +152,11 @@ public class LexerShould : LexerTestFixture
     }
 
     [Test]
-    public void ReadTokens_From_All_Valid_Token_Character_Source()
+    public void ReadTokens_From_All_Valid_Token_Symbol_Source()
     {
         // Arrange
-        Source = string.Join(string.Empty, TokenCharacters);
-        var expectedResult = CreateExpectedTokenResultFromSource(ExpectedSingleCharacterTokenTypeMappings.Keys);
+        Source = string.Join(string.Empty, AllTokenSymbols);
+        var expectedResult = CreateExpectedTokenResultFromSource(ExpectedTokenSymbolMappings.Keys);
         IEnumerable<Token>? result = null;
 
         // Act (define)
@@ -73,22 +167,21 @@ public class LexerShould : LexerTestFixture
         AssertTokenEquivalence(result, expectedResult);
         MockErrorHandler.VerifyNoOtherCalls();
     }
-
+    
     [TestCase(true, false, false)]
     [TestCase(false, true, false)]
     [TestCase(false, false, true)]
-    public void ReadTokens_From_Invalid_Token_Character_Source(bool hasOneInvalidTokenCharacter, 
-        bool hasManyValidTokenCharacters, bool hasAllInvalidTokenCharacters)
+    public void ReadTokens_From_Invalid_Single_Token_Symbol_Source(bool hasOneInvalidTokenSymbol, 
+        bool hasManyValidTokenSymbols, bool hasAllInvalidTokenSymbols)
     {
         // Arrange
-        var preBuiltSource = CreatePreBuiltTokenTokenSource(hasOneInvalidTokenCharacter, 
-            hasManyValidTokenCharacters, hasAllInvalidTokenCharacters);
+        var preBuiltSource = CreatePreBuiltSingleTokenSymbolSource(hasOneInvalidTokenSymbol, 
+            hasManyValidTokenSymbols, hasAllInvalidTokenSymbols);
         var shuffledPrebuiltSource = Shuffle(preBuiltSource);
         Source = string.Join(string.Empty, shuffledPrebuiltSource);
         
-        const string expectedErrorHandlerMessage = "Unexpected Character.";
-        var expectedErrorHandlerErrorCallCount = DetermineErrorHandlerHandleCallCount(shuffledPrebuiltSource);
-        var expectedResult = CreateExpectedTokenResultFromSource(shuffledPrebuiltSource);
+        var expectedErrorHandlerErrorCallCount = DetermineSingleTokenSymbolBasedErrorHandlerHandleCallCount(shuffledPrebuiltSource);
+        var expectedResult = CreateExpectedSingleTokenResultFromSource(shuffledPrebuiltSource);
         IEnumerable<Token>? result = null;
 
         // Act (define)
@@ -97,10 +190,38 @@ public class LexerShould : LexerTestFixture
         // Assert
         readTokens.Should().NotThrow();
         AssertTokenEquivalence(result, expectedResult);
-        MockErrorHandler.Verify(handler => handler.Error(1, expectedErrorHandlerMessage), 
+        MockErrorHandler.Verify(handler => handler.Error(1, ExpectedInvalidCharacterMessage), 
             Times.Exactly(expectedErrorHandlerErrorCallCount));
         MockErrorHandler.VerifyNoOtherCalls();
     }
+    
+    [TestCase(true, false, false)]
+    [TestCase(false, true, false)]
+    [TestCase(false, false, true)]
+    public void ReadTokens_From_Invalid_Multi_Token_Symbol_Source(bool hasOneInvalidTokenSymbol, 
+        bool hasManyValidTokenSymbols, bool hasAllInvalidTokenSymbols)
+    {
+        // Arrange
+        var preBuiltSource = CreatePreBuiltMultiTokenSymbolSource(hasOneInvalidTokenSymbol, 
+            hasManyValidTokenSymbols, hasAllInvalidTokenSymbols);
+        var shuffledPrebuiltSource = Shuffle(preBuiltSource);
+        Source = string.Join(string.Empty, shuffledPrebuiltSource);
+        
+        var expectedErrorHandlerErrorCallCount = DetermineMultiTokenSymbolBasedErrorHandlerHandleCallCount(shuffledPrebuiltSource);
+        var expectedResult = CreateExpectedMultiTokenResultFromSource(shuffledPrebuiltSource);
+        IEnumerable<Token>? result = null;
+
+        // Act (define)
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+        MockErrorHandler.Verify(handler => handler.Error(1, ExpectedInvalidCharacterMessage), 
+            Times.Exactly(expectedErrorHandlerErrorCallCount));
+        MockErrorHandler.VerifyNoOtherCalls();
+    }
+
 
     [TestCase(false)]
     [TestCase(true)]
