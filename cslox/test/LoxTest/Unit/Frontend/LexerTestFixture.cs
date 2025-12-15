@@ -60,15 +60,22 @@ public abstract class LexerTestFixture : CommonTestBase
     protected static IEnumerable<StringPair> SingleTokenSymbolsCombinationTestCaseSource()
     {
         foreach (var singleTokenSymbol1 in SingleTokenSymbols)
-        foreach (var singleTokenSymbol2 in SingleTokenSymbols)
         {
-            var combinedSymbols = $"{singleTokenSymbol1}{singleTokenSymbol2}";
-            if (ExpectedMultiTokenSymbolTypeMappings.ContainsKey(combinedSymbols))
+            foreach (var singleTokenSymbol2 in SingleTokenSymbols)
             {
-                continue;
-            }
+                var combinedSymbols = $"{singleTokenSymbol1}{singleTokenSymbol2}";
+                if (ExpectedMultiTokenSymbolTypeMappings.ContainsKey(combinedSymbols))
+                {
+                    continue;
+                }
 
-            yield return new StringPair(singleTokenSymbol1, singleTokenSymbol2);
+                if (singleTokenSymbol1 == "/" && singleTokenSymbol2 == "/")
+                {
+                    continue;
+                }
+
+                yield return new StringPair(singleTokenSymbol1, singleTokenSymbol2);
+            }
         }
     }
     
@@ -164,14 +171,42 @@ public abstract class LexerTestFixture : CommonTestBase
     
     private static IEnumerable<Token> CreateExpectedTokenResultFromSource(IEnumerable<string> preBuiltSource, IReadOnlyDictionary<string, TokenType> tokenSymbolTypeMappings)
     {
-        var expectedTokenResult = preBuiltSource.Select(tokenSymbol =>
+        var currentLineLumber = 1;
+        List<Token> expectedTokenResult = [];
+        var preBuiltSourceList = preBuiltSource.ToList();
+        for (var index = 0; index < preBuiltSourceList.Count; index++)
         {
-            return tokenSymbolTypeMappings.TryGetValue(tokenSymbol, out var tokenType)
-                ? new Token(tokenType, tokenSymbol, null!, 1)
-                : null;
-        }).OfType<Token>();
+            var tokenSymbol = preBuiltSourceList[index];
+            if (!tokenSymbolTypeMappings.TryGetValue(tokenSymbol, out var tokenType))
+            {
+                continue;
+            }
+            if (!IncrementIndexIfCommentSource(preBuiltSourceList, ref index))
+            {
+                expectedTokenResult.Add(new Token(tokenType, tokenSymbol, null!, currentLineLumber));
+            }
+            else if (index < preBuiltSourceList.Count && preBuiltSourceList[index] == "\n")
+            {
+                currentLineLumber++;
+            }
+        }
         
         return [..expectedTokenResult, ExpectedEndOfFileToken];
+    }
+
+    private static bool IncrementIndexIfCommentSource(IList<string> preBuiltSourceList, ref int index)
+    {
+        var containsCommentSymbol = preBuiltSourceList[index] == "/" && index + 1 < preBuiltSourceList.Count &&
+                                    preBuiltSourceList[index + 1] == "/";
+        if (containsCommentSymbol)
+        {
+            while (index < preBuiltSourceList.Count && preBuiltSourceList[index] != "\n")
+            {
+                index++;
+            } 
+        }
+
+        return containsCommentSymbol;
     }
     
     private List<string> CreatePreBuiltTokenSymbolSource(bool hasOneInvalidTokenSymbol,

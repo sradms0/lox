@@ -240,4 +240,31 @@ public class LexerShould : LexerTestFixture
         AssertTokenEquivalence(result, expectedResult);
         MockErrorHandler.VerifyNoOtherCalls();
     }
+
+    [TestCase("/,/,\n")]
+    [TestCase("/,/,\n,/,/,\n")]
+    [TestCase("/,/,\n,/")]
+    [TestCase("/,/,\n/,/,\n,/")]
+    [TestCase("/,\n,/,/,\n,/,/,\n")]
+    [TestCase("/,\n,/,/,\n,/,/,\n,/")]
+    [TestCase("/,/,/,/\n")]
+    [TestCase("/,\n,/,/,/,/,\n")]
+    [TestCase("/,/,/,/,\n,/")]
+    [TestCase("/,/")]
+    [TestCase("/,/,/,/")]
+    public void ReadTokens_From_Comment_Included_Source(string commentIncludedSource)
+    {
+        // Arrange
+        var preBuiltSource = commentIncludedSource.Split(",");
+        Source = string.Join(string.Empty, preBuiltSource);
+        var expectedResult = CreateExpectedTokenResultFromSource(preBuiltSource);
+        IEnumerable<Token>? result = null;
+        
+        // Act 
+        var readTokens = () => result = Lexer.ReadTokens(Source);
+
+        // Assert
+        readTokens.Should().NotThrow();
+        AssertTokenEquivalence(result, expectedResult);
+    }
 }
